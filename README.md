@@ -7,8 +7,14 @@ Predicts three mechanical properties of steel from composition + heat treatment:
 
 ```
 steel_property_predictor.py     <- the pipeline: preprocessing -> training -> saved models -> predict()
+api.py                          <- FastAPI server exposing /predict for the web app
 steel_properties.ipynb          <- exploratory/audit notebook (the "why" behind every design choice)
 requirements.txt                <- Python dependencies
+
+web/                            <- Next.js frontend (Tailwind + glassmorphism UI)
+  app/                          <- pages, layout, globals.css
+  components/                   <- prediction form, result cards, model info sidebar
+  lib/api.ts                    <- calls the FastAPI backend
 
 steelbench_core_open.csv        <- core dataset (1,360 rows: EMK spec sheets, NIMS heats, Kaggle-measured steels)
 external_data/
@@ -22,6 +28,34 @@ models/                         <- trained models from steel_property_predictor.
 models_notebook/                <- models trained inside the notebook, on the smaller un-augmented
                                     dataset only. Kept separate on purpose -- see "Two model sets" below.
 ```
+
+## Web app (Next.js + FastAPI)
+
+**1. Install Python dependencies and train models** (skip training if `models/*.joblib` already exist):
+
+```bash
+pip install -r requirements.txt
+python steel_property_predictor.py
+```
+
+**2. Start the API** (from project root):
+
+```bash
+uvicorn api:app --reload --port 8000
+```
+
+**3. Start the frontend** (in a second terminal):
+
+```bash
+cd web
+npm install
+cp .env.local.example .env.local   # or copy manually on Windows
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). The UI sends composition + heat-treatment inputs to `POST /predict` and displays UTS, YS, and hardness predictions.
+
+Set `NEXT_PUBLIC_API_URL` in `web/.env.local` if the API runs on a different host/port.
 
 ## Quickest path: use the trained models
 

@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #1c1c1e;
+  --bg-elevated: #1f1f1f;
+  --bg-surface: #232324;
+  --border-muted: #444444;
+  --text-primary: #ededed;
+  --text-secondary: rgba(237, 237, 237, 0.7);
+  --accent: #57a6f4;
+  --accent-light: #75b9fd;
+  --error: #f76979;
+  --error-bright: #ff453a;
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(87, 166, 244, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(87, 166, 244, 0.06), transparent),
+    var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", sans-serif;
+}
+
+@layer components {
+  .glass-panel {
+    @apply rounded-2xl border border-white/[0.08] bg-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl;
+  }
+
+  .glass-input {
+    @apply w-full rounded-xl border border-white/[0.08] bg-black/20 px-3.5 py-2.5 text-sm text-text-primary
+      placeholder:text-white/30 outline-none transition-all duration-200
+      focus:border-accent/50 focus:bg-black/30 focus:ring-2 focus:ring-accent/20;
+  }
+
+  .glass-select {
+    @apply glass-input appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%23ededed' stroke-opacity='0.5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 2.5rem;
+  }
+
+  .section-label {
+    @apply mb-3 font-display text-xs font-semibold uppercase tracking-[0.14em] text-white/50;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-xs font-medium text-white/70;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-semibold
+      text-white shadow-[0_4px_20px_rgba(87,166,244,0.35)] transition-all duration-200
+      hover:bg-accent-light hover:shadow-[0_6px_28px_rgba(117,185,253,0.45)]
+      active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none;
+  }
+
+  .metric-card {
+    @apply glass-panel relative overflow-hidden p-5 opacity-0;
+    animation: cardRise 0.6s ease-out forwards;
+  }
+
+  .metric-card::before {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent;
+  }
+
+  .slider-field {
+    @apply rounded-xl border border-transparent p-3 transition-colors;
+  }
+
+  .slider-field-warning {
+    @apply border-amber-400/20 bg-amber-400/[0.04];
+  }
+
+  .slider-track-wrap {
+    @apply relative h-8;
+  }
+
+  .slider-typical-band {
+    @apply pointer-events-none absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-emerald-400/25;
+  }
+
+  .slider-input {
+    @apply absolute inset-0 z-10 w-full cursor-pointer appearance-none bg-transparent;
+  }
+
+  .slider-input::-webkit-slider-runnable-track {
+    @apply h-1.5 rounded-full bg-white/10;
+  }
+
+  .slider-input::-webkit-slider-thumb {
+    @apply -mt-1.5 h-4 w-4 appearance-none rounded-full border-2 border-accent bg-base-surface shadow-[0_0_12px_rgba(87,166,244,0.45)];
+  }
+
+  .slider-input::-moz-range-track {
+    @apply h-1.5 rounded-full bg-white/10;
+  }
+
+  .slider-input::-moz-range-thumb {
+    @apply h-4 w-4 rounded-full border-2 border-accent bg-base-surface shadow-[0_0_12px_rgba(87,166,244,0.45)];
+  }
+
+  .chart-bar-track {
+    @apply h-2 overflow-hidden rounded-full bg-white/[0.08];
+  }
+
+  .chart-bar-fill {
+    @apply h-full rounded-full transition-all duration-300;
+  }
+
+  .results-bar {
+    min-height: 4px;
+  }
+}
+
+@keyframes cardRise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Stagger result cards */
+.metric-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.metric-card:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.metric-card:nth-child(3) {
+  animation-delay: 0.19s;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
