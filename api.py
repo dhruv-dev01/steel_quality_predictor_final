@@ -27,7 +27,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
+        "http://localhost:3000","https://steel-quality-predictor-final.vercel.app",
         "http://127.0.0.1:3000",
         os.getenv("FRONTEND_ORIGIN", "http://localhost:3000"),
     ],
